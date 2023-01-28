@@ -4,17 +4,25 @@ using System;
 using UnityEngine;
 using Assets.Scripts.Structs;
 using Assets.Scripts.Keybind;
+using Assets.Scripts.Structs.Singleton;
 
 namespace Assets.Scripts
 {
     delegate KeyBindManager KeysBindDelegate(Action<KeyCode[]> callback);
 
-    class KeyBindManager : MonoBehaviour
+    class KeyBindManager : LazyDDOLSingletonMonoBehaviour<KeyBindManager>
     {
-        private static KeyBindManager _main;
-        public static KeyBindManager Main => _main;
-
         private readonly Dictionary<Conditional, Action> binds = new();
+
+        private void Update()
+        {
+            foreach (Conditional bind in binds.Keys)
+            {
+                if (!bind.condition()) continue;
+                binds[bind]();
+            }
+        }
+
         public KeysBindDelegate Bind() => Bind(new KeyBind((out KeyCode[] res) => {
             List<KeyCode> pressedKeys = new();
             foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
@@ -36,22 +44,5 @@ namespace Assets.Scripts
 
             return this;
         };
-        private void Awake()
-        {
-            // 이것이 바로 DDOL non-lazy singleton이다 희망편
-            _main = this;
-        }
-        private void Start()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-        private void Update()
-        {
-            foreach (Conditional bind in binds.Keys)
-            {
-                if (!bind.condition()) continue;
-                binds[bind]();
-            }
-        }
     }
 }

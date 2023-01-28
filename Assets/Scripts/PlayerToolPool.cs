@@ -1,23 +1,29 @@
 ﻿using Assets.Scripts.Structs.Singleton;
+using Assets.Scripts.Tools;
 using Assets.Scripts.Utils;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Assets.Scripts
 {
-    class Tool : MonoBehaviour { }
-
     public class PlayerToolPool : SingletonMonoBehaviour<PlayerToolPool>
     {
         [SerializeField] private GameObject emptyTool;
 
-        private ObjectPool<Tool> pool;
+        private ObjectPool<ITool> pool;
 
         protected override void Awake()
         {
-            pool = ObjectPoolUtils.CreateMonoBehaviourPool<Tool>(emptyTool);
+            pool = ObjectPoolUtils.CreateMonoBehaviourPool<ITool>(emptyTool);
         }
+        
+        public T GetTool<T>() where T : ITool {
+            T tool = pool.Get() as T;
+            tool.Init();
+            return tool;
+        }
+
+        // Release 어케하지
+        public void RelaseTool(ITool tool) => pool.Release(tool);
     }
 }

@@ -28,7 +28,7 @@ namespace Assets.Scripts
             body = GetComponent<Rigidbody2D>();
             collider2D = GetComponent<CircleCollider2D>();
 
-            KeyBindManager.Main
+            KeyBindManager.Instance
                 .Bind()((_) => moveSpeedMutliplier = 1)
                 .Bind(KeyCode.LeftShift, KeyCode.RightShift)((_) => moveSpeedMutliplier = 3)
                 .Bind(KeyCode.LeftControl, KeyCode.RightControl)((_) => moveSpeedMutliplier = 0.5f)
@@ -49,6 +49,8 @@ namespace Assets.Scripts
                 distance = 0.05f,
                 direction = Vector2.down
             });
+
+            Vars.Instance.CurrentPlayer = this;
         }
         DebounceDelegate DebounceSound(SoundType type, float delay) => DebounceSound(type, () => delay);
         DebounceDelegate DebounceSound(SoundType type, Func<float> delay) => InvokeUtils.Debounce(() => PlaySound(type), delay);

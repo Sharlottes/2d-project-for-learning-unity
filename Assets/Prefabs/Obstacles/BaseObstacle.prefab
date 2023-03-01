@@ -93,3 +93,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13133d33e45fd6e49842a20e1aa81de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpUpSound: {fileID: 0}
+  jumpDownSound: {fileID: 0}
+  moveSound: {fileID: 0}

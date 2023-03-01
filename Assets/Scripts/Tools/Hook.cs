@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Tools
 {
-    public class Hook : MonoBehaviour, ICollideObservable, ITool
+    public class Hook : Tool, ICollideObservable
     {
         Transform head, wire;
         Vector2 originPos;
@@ -55,8 +55,7 @@ namespace Assets.Scripts.Tools
         {
             originPos = transform.position;
             moveCoroutine = StartCoroutine(MoveAnimation());
-            wire.position = originPos;
-            wire.rotation = new(0, 0, Vector2.Angle(wire.position, head.position), 0);
+            wire.SetPositionAndRotation(originPos, new(0, 0, Vector2.Angle(wire.position, head.position), 0));
         }
 
         GameObject ICollideObservable.GetGameObject() => head.gameObject;
@@ -71,12 +70,12 @@ namespace Assets.Scripts.Tools
             }
         }
 
-        void ITool.Init()
+        public override void Init()
         {
             throw new NotImplementedException();
         }
 
-        void ITool.Active()
+        public override void Active()
         {
             throw new NotImplementedException();
         }

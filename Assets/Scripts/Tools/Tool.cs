@@ -7,10 +7,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Tools
 {
-    public interface ITool
+    public abstract class Tool : MonoBehaviour
     {
-        public void Init();
-        public void Active();
+        public abstract void Init();
+        public abstract void Active();
     }
-
 }

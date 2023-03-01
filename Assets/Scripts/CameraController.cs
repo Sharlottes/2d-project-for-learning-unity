@@ -24,6 +24,8 @@ namespace Assets.Scripts
         {
             _instance = this;
             camera = GetComponent<Camera>();
+
+            ZoomOutAnimation(10); // 엄
         }
 
         private IEnumerator ZoomOutCoroutine(float amount, float duration = 1)

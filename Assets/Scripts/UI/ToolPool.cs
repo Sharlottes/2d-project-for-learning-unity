@@ -6,24 +6,25 @@ using UnityEngine.Pool;
 
 namespace Assets.Scripts
 {
-    public class PlayerToolPool : SingletonMonoBehaviour<PlayerToolPool>
+    public class ToolPool : SingletonMonoBehaviour<ToolPool>
     {
         [SerializeField] private GameObject emptyTool;
 
-        private ObjectPool<ITool> pool;
+        private ObjectPool<Tool> pool;
 
         protected override void Awake()
         {
-            pool = ObjectPoolUtils.CreateMonoBehaviourPool<ITool>(emptyTool);
+            pool = ObjectPoolUtils.CreateMonoBehaviourPool<Tool>(emptyTool);
         }
         
-        public T GetTool<T>() where T : ITool {
+        public T GetTool<T>() where T : Tool 
+        {
             T tool = pool.Get() as T;
             tool.Init();
             return tool;
         }
 
         // Release 어케하지
-        public void RelaseTool(ITool tool) => pool.Release(tool);
+        public void RelaseTool(Tool tool) => pool.Release(tool);
     }
 }

@@ -15,7 +15,7 @@ namespace Assets.Scripts
         protected override void Awake()
         {
             _instance = this;
-            pool = ObjectPoolUtils.CreateMonoBehaviourPool<EffectSoundDummy>(dummy);
+            pool = ObjectPoolUtils.CreateMonoBehaviourPool<EffectSoundDummy>(() => Instantiate(dummy, transform));
             DontDestroyOnLoad(gameObject);
         }
         public void Release(EffectSoundDummy dummy) => pool.Release(dummy);

@@ -1,3 +1,4 @@
+using Assets.Scripts.Tools;
 using Assets.Scripts.Utils;
 using System;
 using UnityEngine;
@@ -18,8 +19,7 @@ namespace Assets.Scripts
         private Rigidbody2D body;
         private new CircleCollider2D collider2D;
 
-        //temp
-        public GameObject hookPref;
+        public Tool currentTool;
 
         DebounceDelegate moveCoroutiner, jumpUpCoroutiner, jumpDownCoroutiner;
 
@@ -34,14 +34,11 @@ namespace Assets.Scripts
                 .Bind(KeyCode.LeftControl, KeyCode.RightControl)((_) => moveSpeedMutliplier = 0.5f)
                 .Bind(KeyCode.LeftArrow, KeyCode.A)((_) => Move(-1))
                 .Bind(KeyCode.RightArrow, KeyCode.D)((_) => Move(1))
-                .Bind(KeyCode.E)((_) => Hook())
+                .Bind(KeyCodeUtils.Numberics)((keys) => ChangeTool(keys[0]))
                 .Bind(KeyCode.Space)((_) => Jump());
-
             moveCoroutiner = DebounceSound(SoundType.Move, () => 0.3f / GetCalculatedMovement());
             jumpUpCoroutiner = DebounceSound(SoundType.JumpUp, 0.25f);
             jumpDownCoroutiner = DebounceSound(SoundType.JumpDown, 1f);
-
-            CameraController.Instance.ZoomOutAnimation(10);
 
             CollideObserver.Instance.SubscribeCollider(this, () => new()
             {
@@ -55,14 +52,9 @@ namespace Assets.Scripts
         DebounceDelegate DebounceSound(SoundType type, float delay) => DebounceSound(type, () => delay);
         DebounceDelegate DebounceSound(SoundType type, Func<float> delay) => InvokeUtils.Debounce(() => PlaySound(type), delay);
 
-        void Hook()
+        void ChangeTool(KeyCode key)
         {
-            /* TODO: change tool -> implements UseTool() with key binding -> implements Hook's tool - hooking.
-            Hook hook = Instantiate(hookPref, transform.position, Quaternion.identity)
-                .GetComponent<Hook>();
-            hook.owner = this;
-            hook.MoveTo();
-            */
+            // 대충 툴UI에서 indexer로 대꼬오기 - nullable할테니 null체크
         }
 
         void Move(int direction)
